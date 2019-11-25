@@ -1,0 +1,108 @@
+<dx-data-grid
+        id="gridContainer"
+        [dataSource]="dataSource"
+        keyExpr="ID"
+        [showBorders]="true"
+        (onCellPrepared)="onCellPrepared($event)">
+
+  <dxo-filter-row
+          [visible]="showFilterRow"
+          [applyFilter]="currentFilter"></dxo-filter-row>
+
+  <dxo-editing
+          mode="popup"
+          [allowUpdating]="true">
+    <dxo-popup
+            title="Employee Info"
+            [showTitle]="true"
+            [width]="700"
+            [height]="525"
+            [position]="{ my: 'top', at: 'top', of: window }">
+    </dxo-popup>
+
+  <dxo-header-filter
+          [visible]="showHeaderFilter"></dxo-header-filter>
+  <dxo-search-panel
+          [visible]="true"
+          [width]="240"
+          placeholder="Search..."></dxo-search-panel>
+
+  <dxi-column
+          dataField="CompanyName"
+          [width]="140"
+          caption="CompanyName">
+  </dxi-column>
+  <dxi-column
+          dataField="Address"
+          [width]="140"
+          caption="Address">
+    <dxo-header-filter
+            [groupInterval]="10000"></dxo-header-filter>
+  </dxi-column>
+
+
+
+ <dxi-column
+          dataField="State"
+          [width]="140"
+          caption="State">
+  </dxi-column>
+  <dxi-column
+          dataField="City"
+          [width]="140"
+          caption="City">
+  </dxi-column>
+  <dxi-column
+          dataField="Zipcode"
+          [width]="140"
+          caption="Zipcode">
+  </dxi-column>
+
+  <dxi-column
+          dataField="Phone"
+          [width]="140"
+          caption="Phone">
+  </dxi-column>
+ <dxi-column
+          dataField="Fax"
+          [width]="140"
+          caption="Fax">
+  </dxi-column>
+
+  </dxo-editing>
+  <dxo-paging [pageSize]="10"></dxo-paging>
+  <dxo-pager
+          [showPageSizeSelector]="true"
+          [allowedPageSizes]="[5, 10, 20]"
+          [showInfo]="true">
+  </dxo-pager>
+  <dxo-export [enabled]="true" [customizeExcelCell]="customizeExcelCell"></dxo-export>
+
+</dx-data-grid>
+
+<div class="options">
+  <div class="caption">Options</div>
+  <div class="option">
+    <span>Apply Filter</span>
+    <dx-select-box
+            id="useFilterApplyButton"
+            [items]="applyFilterTypes"
+            [(value)]="currentFilter"
+            valueExpr="key"
+            displayExpr="name"
+            [disabled]="!showFilterRow"></dx-select-box>
+  </div>
+  <div class="option">
+    <dx-check-box
+            text="Filter Row"
+            [(value)]="showFilterRow"
+            (onValueChanged)="clearFilter()"></dx-check-box>
+  </div>
+  <div class="option">
+    <dx-check-box
+            text="Header Filter"
+            [(value)]="showHeaderFilter"
+            (onValueChanged)="clearFilter()"></dx-check-box>
+  </div>
+</div>
+
