@@ -1,7 +1,14 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {AllCommunityModules} from '@ag-grid-community/all-modules';
+import { AllModules } from "@ag-grid-enterprise/all-modules";
 import {HttpClient} from '@angular/common/http';
 import {AgGridAngular} from '@ag-grid-community/angular';
+
+
+import '@ag-grid-community/all-modules/dist/styles/ag-grid.css';
+import '@ag-grid-community/all-modules/dist/styles/ag-theme-balham.css';
+import '@ag-grid-enterprise/excel-export';
+
 @Component({
     selector: 'app-ag-grid',
     templateUrl: './ag-grid.component.html',
@@ -10,14 +17,14 @@ import {AgGridAngular} from '@ag-grid-community/angular';
 export class AgGridComponent implements OnInit {
 
     @ViewChild('agGrid') agGrid: AgGridAngular;
-
+    private gridApi111;
     columnDefs;
     gridApi;
     gridColumnApi;
     defaultColDef;
     rowSelection;
     rowData: any = [];
-    modules = AllCommunityModules;
+    modules = AllModules;
 
     // columnDefs = [
     //     {headerName: 'make', field: 'make', sortable: true, filter: true, checkboxSelection: true},
@@ -227,10 +234,10 @@ export class AgGridComponent implements OnInit {
                 field: 'athlete',
                 width: 150,
                 filter: 'agTextColumnFilter',
-                checkboxSelection: function(params) {
+                checkboxSelection: function (params) {
                     return params.columnApi.getRowGroupColumns().length === 0;
                 },
-                headerCheckboxSelection: function(params) {
+                headerCheckboxSelection: function (params) {
                     return params.columnApi.getRowGroupColumns().length === 0;
                 }
             },
@@ -279,6 +286,70 @@ export class AgGridComponent implements OnInit {
     ngOnInit() {
     }
 
+    getBooleanValue(cssSelector) {
+        return document.querySelector(cssSelector).checked === true;
+    }
+
+    onBtExport() {
+        var params = {
+            skipHeader: false, // this.getBooleanValue('#skipHeader'),
+            columnGroups: false, // this.getBooleanValue('#columnGroups'),
+            skipFooters: false, // this.getBooleanValue('#skipFooters'),
+            skipGroups: false, // this.getBooleanValue('#skipGroups'),
+            skipPinnedTop: false, // this.getBooleanValue('#skipPinnedTop'),
+            skipPinnedBottom: false, // this.getBooleanValue('#skipPinnedBottom'),
+            allColumns: false, // this.getBooleanValue('#allColumns'),
+            onlySelected: false, // this.getBooleanValue('#onlySelected'),
+            suppressQuotes: false, // this.getBooleanValue('#suppressQuotes'),
+            fileName: 'abcd', // document.querySelector('#fileName').value,
+            // columnSeparator:  document.querySelector('#columnSeparator').value
+        };
+        /*if (this.getBooleanValue('#skipGroupR')) {
+            params.shouldRowBeSkipped = function (params) {
+                return params.node.data.country.charAt(0) === 'R';
+            };
+        }
+        if (this.getBooleanValue('#useCellCallback')) {
+            params.processCellCallback = function (params) {
+                if (params.value && params.value.toUpperCase) {
+                    return params.value.toUpperCase();
+                } else {
+                    return params.value;
+                }
+            };
+        }
+        if (this.getBooleanValue('#useSpecificColumns')) {
+            params.columnKeys = ['country', 'bronze'];
+        }
+        if (this.getBooleanValue('#processHeaders')) {
+            params.processHeaderCallback = function (params) {
+                return params.column.getColDef().headerName.toUpperCase();
+            };
+        }
+        if (this.getBooleanValue('#processGroupHeaders')) {
+            params.processGroupHeaderCallback = function (params) {
+                return params.columnGroup.getColGroupDef().headerName.toUpperCase();
+            };
+        }
+        if (this.getBooleanValue('#customHeader')) {
+            params.customHeader = '[[[ This ia s sample custom header - so meta data maybe?? ]]]\n';
+        }
+        if (this.getBooleanValue('#customFooter')) {
+            params.customFooter = '[[[ This ia s sample custom footer - maybe a summary line here?? ]]]\n';
+        }*/
+        this.gridApi111.exportDataAsCsv(params);
+    }
+
+    onExcelExport() {
+        var params = {
+            fileName: 'xyz',
+            sheetName: 'd1',
+            exportMode: '.xlsx', // document.querySelector('input[name="mode"]:checked').value
+            columnSeparator: '' //document.querySelector("#columnSeparator").value
+        };
+        this.gridApi111.exportDataAsExcel(params);
+    }
+
     getSelectedRows() {
         const selectedNodes = this.agGrid.api.getSelectedNodes();
         const selectedData = selectedNodes.map(node => node.data);
@@ -288,6 +359,7 @@ export class AgGridComponent implements OnInit {
 
     onGridReady(params) {
         this.gridApi = params.api;
+        this.gridApi111 = params.api;
         this.gridColumnApi = params.columnApi;
 
         // this.http

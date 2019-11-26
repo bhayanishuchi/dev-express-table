@@ -18,6 +18,8 @@ import {ToastrModule} from 'ngx-toastr';
 import {JwtInterceptor} from './_helpers/jwt.interceptor';
 import {BrowserModule} from '@angular/platform-browser';
 
+import { AgGridModule } from '@ag-grid-community/angular';
+
 @NgModule({
     imports: [
         BrowserAnimationsModule,
@@ -30,7 +32,8 @@ import {BrowserModule} from '@angular/platform-browser';
         AppRoutingModule,
         HttpClientModule,
         BrowserModule,
-        ToastrModule.forRoot()
+        ToastrModule.forRoot(),
+        AgGridModule.withComponents([])
     ],
     declarations: [
         AppComponent,
